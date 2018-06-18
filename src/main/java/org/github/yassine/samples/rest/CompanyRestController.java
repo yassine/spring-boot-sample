@@ -8,7 +8,6 @@ import java.util.UUID;
 import javax.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.github.yassine.samples.domain.model.company.Company;
 import org.github.yassine.samples.domain.repository.CompanyRepository;
 import org.github.yassine.samples.dto.CompanyApi;
 import org.github.yassine.samples.dto.PersonApi;
@@ -43,7 +42,6 @@ public class CompanyRestController {
   @RequestMapping(value = "/{companyId}/owner", method = POST)
   @Transactional
   PersonApi onOwnerAdd(@Valid @RequestBody PersonApi personApi, @PathVariable UUID companyId) {
-    Company company = companyRepository.findByUuid(companyId);
     return personService.addCompanyOwner(companyId, personApi);
   }
 
