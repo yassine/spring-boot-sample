@@ -1,0 +1,6 @@
+### Maven template
+target/
+# IntelliJ project files
+.idea/
+*.iml
+dev-sonar.properties

@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-keycloak-identity-provider
+      author: yassine
+      changes:
+        - sql:
+            comment: Create Keycloak Identity Provider
+            sql: INSERT INTO public.identity_provider (id, uuid, name, description, created, created_by_id, last_modified, last_modified_by_id, tenant_id)
+                    VALUES (
+                      nextval('seq__identity_provider__id'),
+                      '11111111-1111-1111-1111-111111111112',
+                      'KEYCLOAK',
+                      'Keycloak Identity Provider',
+                      CURRENT_TIMESTAMP,
+                      (SELECT id from public.identity where uuid = '11111111-1111-1111-1111-111111111111'),
+                      CURRENT_TIMESTAMP,
+                      (SELECT id from public.identity where uuid = '11111111-1111-1111-1111-111111111111'),
+                      (SELECT id from public.identity where uuid = '11111111-1111-1111-1111-111111111111')
+                    );
+
+

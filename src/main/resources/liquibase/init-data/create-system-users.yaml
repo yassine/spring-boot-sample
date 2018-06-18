@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-system-identity
+      author: yassine
+      changes:
+        - sql:
+            comment: Create System Identity Provider
+            sql: INSERT INTO public.identity_provider (id, uuid, name, description, created, last_modified)
+                    VALUES (
+                      nextval('seq__identity_provider__id'),
+                      '11111111-1111-1111-1111-111111111111',
+                      'SYSTEM',
+                      'System Identity Provider',
+                      CURRENT_TIMESTAMP,
+                      CURRENT_TIMESTAMP
+                    );
+        - sql:
+            comment: Create System Identity
+            sql: INSERT INTO public.identity (id, uuid, provider_id,  created, last_modified)
+                    VALUES (
+                      nextval('seq__identity__id'),
+                      '11111111-1111-1111-1111-111111111111',
+                      (SELECT id from identity_provider where uuid = '11111111-1111-1111-1111-111111111111'),
+                      CURRENT_TIMESTAMP,
+                      CURRENT_TIMESTAMP
+                    );
+        - sql:
+            comment: Update System Identity
+            sql: UPDATE public.identity
+                    SET tenant_id = (SELECT id FROM public.identity WHERE uuid = '11111111-1111-1111-1111-111111111111'),
+                        created_by_id = (SELECT id FROM public.identity WHERE uuid = '11111111-1111-1111-1111-111111111111'),
+                        last_modified_by_id = (SELECT id FROM public.identity WHERE uuid = '11111111-1111-1111-1111-111111111111')
+                    WHERE uuid = '11111111-1111-1111-1111-111111111111';
+                 UPDATE public.identity_provider
+                    SET created_by_id = (SELECT id FROM public.identity WHERE uuid = '11111111-1111-1111-1111-111111111111'),
+                        last_modified_by_id = (SELECT id FROM public.identity WHERE uuid = '11111111-1111-1111-1111-111111111111'),
+                        tenant_id = (SELECT id FROM public.identity WHERE uuid = '11111111-1111-1111-1111-111111111111')
+                    WHERE uuid = '11111111-1111-1111-1111-111111111111';
+        - sql:
+            comment: Update System Identity tenant
+            sql: UPDATE public.identity
+                    SET tenant_id = (SELECT id FROM public.identity WHERE uuid = '00000000-0000-0000-0000-000000000000')
+                    WHERE uuid = '00000000-0000-0000-0000-000000000000';
+  - changeSet:
+      id: add-system-user-roles
+      author: yassine
+      changes:
+        - sql:
+            comment: Add System role to System User
+            sql: INSERT INTO public.identity_role (id, uuid, identity_id, role, created, created_by_id, last_modified, last_modified_by_id)
+                    VALUES (
+                      nextval('seq__identity_provider__id'),
+                      '11111111-1111-1111-1111-111111111111',
+                      (SELECT id FROM public.identity WHERE uuid = '11111111-1111-1111-1111-111111111111'),
+                      'SYSTEM',
+                      CURRENT_TIMESTAMP,
+                      (SELECT id FROM public.identity WHERE uuid = '11111111-1111-1111-1111-111111111111'),
+                      CURRENT_TIMESTAMP,
+                      (SELECT id FROM public.identity WHERE uuid = '11111111-1111-1111-1111-111111111111')
+                    );

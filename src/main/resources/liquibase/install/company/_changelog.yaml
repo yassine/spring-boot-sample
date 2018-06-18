@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: company.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: person.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: rel__company__person.yaml
+      relativeToChangelogFile: true

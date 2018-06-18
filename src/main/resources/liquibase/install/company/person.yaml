@@ -1,0 +1,90 @@
+databaseChangeLog:
+- changeSet:
+    id: create-table-person
+    author: yassine
+    objectQuotingStrategy: QUOTE_ALL_OBJECTS
+    changes:
+      - createTable:
+          tableName: person
+          columns:
+            - column:
+                name: id
+                type: BIGINT
+            - column:
+                name: uuid
+                type: UUID
+                constraints:
+                  nullable: false
+                  unique: true
+                  uniqueConstraintName: uc__person__uuid
+            - column:
+                name: first_name
+                type: VARCHAR(255)
+            - column:
+                name: middle_name
+                type: VARCHAR(255)
+            - column:
+                name: last_name
+                type: VARCHAR(255)
+            - column:
+                name: created
+                type: TIMESTAMP(6) WITHOUT TIME ZONE
+            - column:
+                name: last_modified
+                type: TIMESTAMP(6) WITHOUT TIME ZONE
+            - column:
+                name: tenant_id
+                type: BIGINT
+            - column:
+                name: created_by_id
+                type: BIGINT
+            - column:
+                name: last_modified_by_id
+                type: BIGINT
+      - addPrimaryKey:
+          columnNames: id
+          constraintName: pk__person__id
+          tableName: person
+      - addForeignKeyConstraint:
+          baseColumnNames: tenant_id
+          baseTableName: person
+          constraintName: fk__person__tenant_id
+          deferrable: false
+          initiallyDeferred: false
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+      - addForeignKeyConstraint:
+          baseColumnNames: created_by_id
+          baseTableName: person
+          constraintName: fk__person__created_by_id
+          deferrable: false
+          initiallyDeferred: false
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+      - addForeignKeyConstraint:
+          baseColumnNames: last_modified_by_id
+          baseTableName: person
+          constraintName: fk__person__last_modified_by_id
+          deferrable: false
+          initiallyDeferred: false
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+      - createSequence:
+          sequenceName: seq__person__id
+      - createIndex:
+          columns:
+            - column:
+                name: tenant_id
+                type: BIGINT
+            - column:
+                name: uuid
+                type: UUID
+          indexName: index__person__tenant_id__uuid
+          tableName: person
+          unique: true

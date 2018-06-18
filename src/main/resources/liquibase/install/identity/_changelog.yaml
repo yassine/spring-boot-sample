@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: identity_provider.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: identity.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: identity_role.yaml
+      relativeToChangelogFile: true

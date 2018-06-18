@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: identity/_changelog.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: company/_changelog.yaml
+      relativeToChangelogFile: true

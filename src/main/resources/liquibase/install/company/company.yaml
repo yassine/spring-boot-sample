@@ -1,0 +1,99 @@
+databaseChangeLog:
+- changeSet:
+    id: create-table-company
+    author: yassine
+    objectQuotingStrategy: QUOTE_ALL_OBJECTS
+    changes:
+      - createTable:
+          tableName: company
+          columns:
+            - column:
+                name: id
+                type: BIGINT
+            - column:
+                name: uuid
+                type: UUID
+                constraints:
+                  nullable: false
+                  unique: true
+                  uniqueConstraintName: uc__company__uuid
+            - column:
+                name: name
+                type: VARCHAR(255)
+            - column:
+                name: street_line
+                type: VARCHAR(255)
+            - column:
+                name: city
+                type: VARCHAR(255)
+            - column:
+                name: country
+                type: VARCHAR(255)
+            - column:
+                name: email
+                type: VARCHAR(255)
+            - column:
+                name: phone
+                type: VARCHAR(255)
+            - column:
+                name: created
+                type: TIMESTAMP(6) WITHOUT TIME ZONE
+            - column:
+                name: last_modified
+                type: TIMESTAMP(6) WITHOUT TIME ZONE
+            - column:
+                name: tenant_id
+                type: BIGINT
+            - column:
+                name: created_by_id
+                type: BIGINT
+            - column:
+                name: last_modified_by_id
+                type: BIGINT
+      - addPrimaryKey:
+          columnNames: id
+          constraintName: pk__company__id
+          tableName: company
+      - addForeignKeyConstraint:
+          baseColumnNames: tenant_id
+          baseTableName: company
+          constraintName: fk__company__tenant_id
+          deferrable: false
+          initiallyDeferred: false
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+      - addForeignKeyConstraint:
+          baseColumnNames: created_by_id
+          baseTableName: company
+          constraintName: fk__company__created_by_id
+          deferrable: false
+          initiallyDeferred: false
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+      - addForeignKeyConstraint:
+          baseColumnNames: last_modified_by_id
+          baseTableName: company
+          constraintName: fk__company__last_modified_by_id
+          deferrable: false
+          initiallyDeferred: false
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+      - createSequence:
+          sequenceName: seq__company__id
+      - createIndex:
+          columns:
+            - column:
+                name: tenant_id
+                type: BIGINT
+            - column:
+                name: uuid
+                type: UUID
+          indexName: index__company__tenant_id__uuid
+          tableName: company
+          unique: true

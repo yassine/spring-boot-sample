@@ -1,0 +1,78 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_identity_role
+      author: yassine
+      objectQuotingStrategy: QUOTE_ALL_OBJECTS
+      changes:
+      - createTable:
+          tableName: identity_role
+          columns:
+            - column:
+                name: id
+                type: BIGINT
+            - column:
+                name: uuid
+                type: UUID
+                constraints:
+                  nullable: false
+                  unique: true
+                  uniqueConstraintName: uc__identity_role__uuid
+            - column:
+                name: identity_id
+                type: BIGINT
+            - column:
+                name: role
+                type: VARCHAR(50)
+            - column:
+                name: created
+                type: TIMESTAMP(6) WITHOUT TIME ZONE
+            - column:
+                name: last_modified
+                type: TIMESTAMP(6) WITHOUT TIME ZONE
+            - column:
+                name: created_by_id
+                type: BIGINT
+            - column:
+                name: last_modified_by_id
+                type: BIGINT
+      - addPrimaryKey:
+          columnNames: id
+          constraintName: pk__identity_role__id
+          tableName: identity_role
+      - addForeignKeyConstraint:
+          baseColumnNames: created_by_id
+          baseTableName: identity_role
+          constraintName: fk__identity__created_by_id
+          deferrable: false
+          initiallyDeferred: false
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+      - addForeignKeyConstraint:
+          baseColumnNames: last_modified_by_id
+          baseTableName: identity_role
+          constraintName: fk__identity__last_modified_by_id
+          deferrable: false
+          initiallyDeferred: false
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+      - addForeignKeyConstraint:
+          baseColumnNames: identity_id
+          baseTableName: identity_role
+          constraintName: fk__identity__identity_id
+          deferrable: false
+          initiallyDeferred: false
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+      - addUniqueConstraint:
+          columnNames: identity_id, role
+          constraintName: uc__identity_role__identity_id__role
+          tableName: identity_role
+      - createSequence:
+          sequenceName: seq__identity_role__id
+

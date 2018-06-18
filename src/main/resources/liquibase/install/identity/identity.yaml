@@ -1,0 +1,148 @@
+databaseChangeLog:
+- changeSet:
+    id: create-table-identity
+    author: yassine
+    objectQuotingStrategy: QUOTE_ALL_OBJECTS
+    changes:
+    - createTable:
+        tableName: identity
+        columns:
+        - column:
+            name: id
+            type: BIGINT
+        - column:
+            name: uuid
+            type: UUID
+            constraints:
+              nullable: false
+              unique: true
+              uniqueConstraintName: uc__identity__uuid
+        - column:
+            name: created
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: last_modified
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: external_id
+            type: VARCHAR(255)
+        - column:
+            name: created_by_id
+            type: BIGINT
+        - column:
+            name: last_modified_by_id
+            type: BIGINT
+        - column:
+            name: provider_id
+            type: BIGINT
+        - column:
+            name: tenant_id
+            type: BIGINT
+    - createSequence:
+        sequenceName: seq__identity__id
+    - createIndex:
+          columns:
+            - column:
+                name: tenant_id
+                type: BIGINT
+            - column:
+                name: uuid
+                type: UUID
+          indexName: identity_table_uuid_index
+          tableName: identity
+          unique: true
+    - createIndex:
+          columns:
+            - column:
+                name: provider_id
+                type: BIGINT
+            - column:
+                name: external_id
+                type: VARCHAR(255)
+          indexName: identity_table_external_id_index
+          tableName: identity
+          unique: true
+    - addPrimaryKey:
+        columnNames: id
+        constraintName: identity_pkey
+        tableName: identity
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by_id
+        baseTableName: identity
+        constraintName: fk__identity__created_by_id
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: identity
+    - addForeignKeyConstraint:
+        baseColumnNames: last_modified_by_id
+        baseTableName: identity
+        constraintName: fk__identity__last_modified_by_id
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: identity
+    - addForeignKeyConstraint:
+        baseColumnNames: provider_id
+        baseTableName: identity
+        constraintName: fk__identity__provider_id
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: identity_provider
+- changeSet:
+    id: resolve-identity-table-constraints-cycles
+    author: yassine
+    objectQuotingStrategy: QUOTE_ALL_OBJECTS
+    changes:
+      - addForeignKeyConstraint:
+          baseColumnNames: tenant_id
+          baseTableName: identity
+          constraintName: fk__identity__tenant_id
+          deferrable: true
+          initiallyDeferred: true
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+      ##identity-provider constraints
+      ##resolves cycle dependency
+      - addForeignKeyConstraint:
+          baseColumnNames: tenant_id
+          baseTableName: identity_provider
+          constraintName: fk__identity_provider__tenant_id
+          deferrable: false
+          initiallyDeferred: false
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+      - addForeignKeyConstraint:
+          baseColumnNames: created_by_id
+          baseTableName: identity_provider
+          constraintName: fk__identity_provider__created_by_id
+          deferrable: false
+          initiallyDeferred: false
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+      - addForeignKeyConstraint:
+          baseColumnNames: last_modified_by_id
+          baseTableName: identity_provider
+          constraintName: fk__identity_provider__last_modified_by_id
+          deferrable: false
+          initiallyDeferred: false
+          onDelete: NO ACTION
+          onUpdate: NO ACTION
+          referencedColumnNames: id
+          referencedTableName: identity
+
+    
+    
