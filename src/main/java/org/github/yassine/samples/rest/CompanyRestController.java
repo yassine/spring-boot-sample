@@ -2,8 +2,11 @@ package org.github.yassine.samples.rest;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
+import com.google.common.base.Preconditions;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import javax.validation.Valid;
 import lombok.AccessLevel;
@@ -33,6 +36,11 @@ public class CompanyRestController {
     return companyService.save(companyApi);
   }
 
+  @RequestMapping(method = PUT)
+  Optional<CompanyApi> onUpdate(@Valid @RequestBody CompanyApi companyApi) {
+    return companyService.update(companyApi);
+  }
+
   @RequestMapping(method = GET)
   Page<CompanyApi> list(@RequestParam(value = "page", defaultValue = "0") Integer page,
                         @RequestParam(value = "size", defaultValue = "10") Integer pageSize) {
@@ -40,7 +48,7 @@ public class CompanyRestController {
   }
 
   @RequestMapping(value = "/{companyId}", method = GET)
-  CompanyApi get(@PathVariable UUID companyId) {
+  Optional<CompanyApi> get(@PathVariable UUID companyId) {
     return companyService.findByUuid(companyId);
   }
 
@@ -50,7 +58,7 @@ public class CompanyRestController {
   }
 
   @RequestMapping(value = "/{companyId}/owner", method = GET)
-  List<PersonApi> owners(@PathVariable UUID companyId) {
+  Optional<List<PersonApi>> owners(@PathVariable UUID companyId) {
     return personService.getOwners(companyId);
   }
 }

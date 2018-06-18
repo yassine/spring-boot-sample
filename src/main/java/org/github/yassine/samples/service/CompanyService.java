@@ -1,5 +1,6 @@
 package org.github.yassine.samples.service;
 
+import java.util.Optional;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,16 @@ public class CompanyService {
     return companyMapper.mapReverse(company);
   }
 
-  public CompanyApi findByUuid(UUID uuid) {
-    return companyMapper.mapReverse(repository.findByUuid(uuid));
+  public Optional<CompanyApi> update(CompanyApi api) {
+    Optional<Company> company = repository.findByUuid(api.getId())
+      .map(c -> companyMapper.map(api, c));
+    company.ifPresent(repository::save);
+    return company.map(companyMapper::mapReverse);
+  }
+
+  public Optional<CompanyApi> findByUuid(UUID uuid) {
+    return repository.findByUuid(uuid)
+      .map(companyMapper::mapReverse);
   }
 
   public Page<CompanyApi> list(int page, int maxItems) {

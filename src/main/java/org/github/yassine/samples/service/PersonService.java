@@ -1,6 +1,9 @@
 package org.github.yassine.samples.service;
 
+import static java.lang.String.format;
+
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -32,17 +35,19 @@ public class PersonService {
   }
 
   public PersonApi addCompanyOwner(UUID companyId, Person person) {
-    Company company = companyRepository.findByUuid(companyId);
+    Company company = companyRepository.findByUuid(companyId)
+      .orElseThrow(() -> new RuntimeException(
+        format("Unable to find company with id : '%s'", companyId)));
     company.getOwners().add(person);
     companyRepository.save(company);
     return personBoundMapperFacade.mapReverse(person);
   }
 
   @Transactional
-  public List<PersonApi> getOwners(UUID companyId) {
-    return companyRepository.findByUuid(companyId).getOwners().stream()
-      .map(personBoundMapperFacade::mapReverse)
-      .collect(Collectors.toList());
+  public Optional<List<PersonApi>> getOwners(UUID companyId) {
+    return companyRepository.findByUuid(companyId).map(Company::getOwners)
+      .map(owners -> owners.stream().map(personBoundMapperFacade::mapReverse)
+        .collect(Collectors.toList()));
   }
 
 }
