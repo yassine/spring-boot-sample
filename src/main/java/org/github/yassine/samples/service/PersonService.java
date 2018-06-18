@@ -1,6 +1,8 @@
 package org.github.yassine.samples.service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.BoundMapperFacade;
@@ -34,6 +36,13 @@ public class PersonService {
     company.getOwners().add(person);
     companyRepository.save(company);
     return personBoundMapperFacade.mapReverse(person);
+  }
+
+  @Transactional
+  public List<PersonApi> getOwners(UUID companyId) {
+    return companyRepository.findByUuid(companyId).getOwners().stream()
+      .map(personBoundMapperFacade::mapReverse)
+      .collect(Collectors.toList());
   }
 
 }

@@ -3,6 +3,7 @@ package org.github.yassine.samples.rest;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import lombok.AccessLevel;
@@ -46,4 +47,9 @@ public class CompanyRestController {
     return personService.addCompanyOwner(companyId, personApi);
   }
 
+  @RequestMapping(value = "/{companyId}/owner", method = GET)
+  @Transactional
+  List<PersonApi> owners(@PathVariable UUID companyId) {
+    return personService.getOwners(companyId);
+  }
 }
