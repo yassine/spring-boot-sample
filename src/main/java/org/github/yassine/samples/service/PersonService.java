@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+
+@Transactional
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired), access = AccessLevel.PUBLIC)
 public class PersonService {
@@ -23,14 +25,12 @@ public class PersonService {
   private final PersonRepository personRepository;
   private final BoundMapperFacade<PersonApi, Person> personBoundMapperFacade;
 
-  @Transactional
   public PersonApi addCompanyOwner(UUID companyId, PersonApi personApi) {
     Person person = personBoundMapperFacade.map(personApi);
     personRepository.save(person);
     return addCompanyOwner(companyId, person);
   }
 
-  @Transactional
   public PersonApi addCompanyOwner(UUID companyId, Person person) {
     Company company = companyRepository.findByUuid(companyId);
     company.getOwners().add(person);

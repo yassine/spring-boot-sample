@@ -40,13 +40,11 @@ public class CompanyRestController {
   }
 
   @RequestMapping(value = "/{companyId}/owner", method = POST)
-  @Transactional
   PersonApi onOwnerAdd(@Valid @RequestBody PersonApi personApi, @PathVariable UUID companyId) {
     return personService.addCompanyOwner(companyId, personApi);
   }
 
   @RequestMapping(value = "/{companyId}/owner", method = GET)
-  @Transactional
   List<PersonApi> owners(@PathVariable UUID companyId) {
     return personService.getOwners(companyId);
   }

@@ -13,13 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired), access = AccessLevel.PUBLIC)
+@Transactional
 public class CompanyService {
 
   private final CompanyRepository repository;
   private final BoundMapperFacade<CompanyApi, Company> companyMapper;
 
-
-  @Transactional
   public CompanyApi save(CompanyApi api) {
     Company company = companyMapper.map(api);
     repository.save(company);
