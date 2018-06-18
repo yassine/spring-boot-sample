@@ -1,8 +1,9 @@
-package org.github.yassine.samples.service;
+package org.github.yassine.samples;
 
 import java.util.Optional;
 import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.BoundMapperFacade;
 import org.github.yassine.samples.domain.model.company.Company;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CompanyService {
 
   private final CompanyRepository repository;
+  @Getter
   private final BoundMapperFacade<CompanyApi, Company> companyMapper;
 
   public CompanyApi save(CompanyApi api) {

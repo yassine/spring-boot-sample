@@ -1,0 +1,10 @@
+{
+  "name"  : "my-test-company-1",
+  "email" : "my-test-company-1@localhost.com",
+  "phone" : "000",
+  "address" : {
+    "streetLine" : "1, some street",
+    "city" : "Madrid",
+    "country" : "Spain"
+  }
+}

@@ -18,7 +18,7 @@ import org.springframework.beans.factory.support.GenericBeanDefinition;
 
 @SuppressWarnings("NullableProblems")
 @Slf4j
-public class MappingBeanPostProducer implements BeanDefinitionRegistryPostProcessor {
+public class MappingConfiguration implements BeanDefinitionRegistryPostProcessor {
 
   private static final String BOUND_MAPPER_SUFFIX = "BoundMapper";
   private final Orika orika = new Orika.Builder()

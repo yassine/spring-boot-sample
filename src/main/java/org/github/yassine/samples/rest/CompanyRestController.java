@@ -4,7 +4,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
-import com.google.common.base.Preconditions;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,8 +12,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.github.yassine.samples.dto.CompanyApi;
 import org.github.yassine.samples.dto.PersonApi;
-import org.github.yassine.samples.service.CompanyService;
-import org.github.yassine.samples.service.PersonService;
+import org.github.yassine.samples.CompanyService;
+import org.github.yassine.samples.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;

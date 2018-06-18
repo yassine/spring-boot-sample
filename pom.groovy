@@ -59,6 +59,13 @@ project {
     dependency 'org.codehaus.groovy:groovy-all:2.4.13:test'
     dependency 'org.spockframework:spock-core:1.1-groovy-2.4:test'
     dependency 'org.spockframework:spock-guice:1.1-groovy-2.4:test'
+    dependency 'org.testcontainers:testcontainers:1.8.0:test'
+    dependency 'org.testcontainers:postgresql:1.8.0:test'
+    dependency 'org.awaitility:awaitility:3.0.0:test'
+    dependency 'commons-io:commons-io:2.6:test'
+    dependency 'com.squareup.okhttp3:okhttp:3.10.0:test'
+    dependency 'io.rest-assured:rest-assured:3.1.0:test'
+
   }
   build {
     pluginManagement {
@@ -160,20 +167,35 @@ project {
             }
             configuration {
               testClassesDirectory '${project.build.directory}/functional-tests'
+              testSourceDirectory '{project.basedir}/src/test/functional-tests'
+            }
+          }
+          execution {
+            id 'default-tests'
+            goals {
+              goal 'test'
+            }
+            configuration {
+              testClassesDirectory '${project.build.directory}/test-classes'
             }
           }
         }
         configuration{
           useFile 'false'
           testClassesDirectory '${project.build.directory}/unit-tests'
+          testSourceDirectory '{project.basedir}/src/test/unit-tests'
           includes {
             include '**/*Spec'
+            include '**/*Test'
           }
           additionalClasspathElements {
             additionalClasspathElement '${project.build.testOutputDirectory}'
             additionalClasspathElement '${project.basedir}/src/test/resources'
           }
           argLine '${surefireArgLine}'
+          properties {
+            'listener' 'org.github.yassine.samples.TestRunListener'
+          }
         }
       }
       plugin {

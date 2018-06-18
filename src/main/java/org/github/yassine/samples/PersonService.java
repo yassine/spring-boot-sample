@@ -1,4 +1,4 @@
-package org.github.yassine.samples.service;
+package org.github.yassine.samples;
 
 import static java.lang.String.format;
 
