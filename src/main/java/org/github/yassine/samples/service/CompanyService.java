@@ -8,6 +8,9 @@ import org.github.yassine.samples.domain.model.company.Company;
 import org.github.yassine.samples.domain.repository.CompanyRepository;
 import org.github.yassine.samples.dto.CompanyApi;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,4 +31,14 @@ public class CompanyService {
   public CompanyApi findByUuid(UUID uuid) {
     return companyMapper.mapReverse(repository.findByUuid(uuid));
   }
+
+  public Page<CompanyApi> list(int page, int maxItems) {
+    return list(page, maxItems, Sort.unsorted());
+  }
+
+  public Page<CompanyApi> list(int page, int maxItems, Sort sort) {
+    return repository.findAll(PageRequest.of(page, maxItems, sort))
+              .map(companyMapper::mapReverse);
+  }
+
 }

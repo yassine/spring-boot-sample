@@ -8,16 +8,16 @@ import java.util.UUID;
 import javax.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.github.yassine.samples.domain.repository.CompanyRepository;
 import org.github.yassine.samples.dto.CompanyApi;
 import org.github.yassine.samples.dto.PersonApi;
 import org.github.yassine.samples.service.CompanyService;
 import org.github.yassine.samples.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,12 +26,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class CompanyRestController {
 
   private final CompanyService companyService;
-  private final CompanyRepository companyRepository;
   private final PersonService personService;
 
-  @RequestMapping(value = "/", method = POST)
+  @RequestMapping(method = POST)
   CompanyApi onCreate(@Valid @RequestBody CompanyApi companyApi) {
     return companyService.save(companyApi);
+  }
+
+  @RequestMapping(method = GET)
+  Page<CompanyApi> list(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                        @RequestParam(value = "size", defaultValue = "10") Integer pageSize) {
+    return companyService.list(page, pageSize);
   }
 
   @RequestMapping(value = "/{companyId}", method = GET)

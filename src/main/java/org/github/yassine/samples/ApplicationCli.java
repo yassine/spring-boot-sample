@@ -16,7 +16,6 @@ public class ApplicationCli {
     cliBuilder
       .withGroup("db")
       .withDescription("Database versioning related commands")
-      .withDefaultCommand(DbInstallCommand.class)
       .withCommands(DbInstallCommand.class, DbInitCommand.class);
     cliBuilder.build().parse(args).run();
   }
