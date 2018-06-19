@@ -1,4 +1,4 @@
-package org.github.yassine.samples;
+package org.github.yassine.samples.domain.service;
 
 import java.util.Optional;
 import java.util.UUID;
