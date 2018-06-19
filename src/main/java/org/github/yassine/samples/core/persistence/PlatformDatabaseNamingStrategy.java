@@ -1,4 +1,4 @@
-package org.github.yassine.samples.core;
+package org.github.yassine.samples.core.persistence;
 
 import com.google.common.base.CaseFormat;
 import org.hibernate.boot.model.naming.Identifier;

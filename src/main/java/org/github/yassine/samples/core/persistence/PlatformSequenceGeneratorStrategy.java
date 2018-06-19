@@ -1,4 +1,4 @@
-package org.github.yassine.samples.core;
+package org.github.yassine.samples.core.persistence;
 
 import java.util.Properties;
 import lombok.Getter;
