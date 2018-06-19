@@ -1,0 +1,11 @@
+{
+  "id":"%s",
+  "name"  : "update-my-test-company-1",
+  "email" : "update-my-test-company-1@localhost.com",
+  "phone" : "update-000",
+  "address" : {
+    "streetLine" : "update-1, some street",
+    "city" : "update-Madrid",
+    "country" : "update-Spain"
+  }
+}

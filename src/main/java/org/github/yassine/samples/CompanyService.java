@@ -52,4 +52,9 @@ public class CompanyService {
               .map(companyMapper::mapReverse);
   }
 
+  public void delete(UUID companyUuid) {
+    repository.findByUuid(companyUuid)
+      .ifPresent(repository::delete);
+  }
+
 }

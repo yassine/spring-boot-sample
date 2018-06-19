@@ -1,8 +1,6 @@
 package org.github.yassine.samples.rest;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +42,11 @@ public class CompanyRestController {
   Page<CompanyApi> list(@RequestParam(value = "page", defaultValue = "0") Integer page,
                         @RequestParam(value = "size", defaultValue = "10") Integer pageSize) {
     return companyService.list(page, pageSize);
+  }
+
+  @RequestMapping(method = DELETE, value = "/{companyId}")
+  void onDelete(@PathVariable UUID companyId) {
+    companyService.delete(companyId);
   }
 
   @RequestMapping(value = "/{companyId}", method = GET)
