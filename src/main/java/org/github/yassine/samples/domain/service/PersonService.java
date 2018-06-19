@@ -13,7 +13,7 @@ import org.github.yassine.samples.domain.model.company.Company;
 import org.github.yassine.samples.domain.model.company.Person;
 import org.github.yassine.samples.domain.repository.CompanyRepository;
 import org.github.yassine.samples.domain.repository.PersonRepository;
-import org.github.yassine.samples.dto.PersonApi;
+import org.github.yassine.samples.api.dto.PersonApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

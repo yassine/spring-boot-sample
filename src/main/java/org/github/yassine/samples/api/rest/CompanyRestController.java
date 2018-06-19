@@ -1,4 +1,4 @@
-package org.github.yassine.samples.rest;
+package org.github.yassine.samples.api.rest;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -8,8 +8,8 @@ import java.util.UUID;
 import javax.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.github.yassine.samples.dto.CompanyApi;
-import org.github.yassine.samples.dto.PersonApi;
+import org.github.yassine.samples.api.dto.CompanyApi;
+import org.github.yassine.samples.api.dto.PersonApi;
 import org.github.yassine.samples.domain.service.CompanyService;
 import org.github.yassine.samples.domain.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;

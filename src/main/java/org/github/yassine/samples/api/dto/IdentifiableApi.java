@@ -1,4 +1,4 @@
-package org.github.yassine.samples.dto;
+package org.github.yassine.samples.api.dto;
 
 import java.util.UUID;
 import lombok.Getter;

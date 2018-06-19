@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.BoundMapperFacade;
 import org.github.yassine.samples.Application;
 import org.github.yassine.samples.domain.model.shared.UUIDIdentifiable;
-import org.github.yassine.samples.dto.IdentifiableApi;
+import org.github.yassine.samples.api.dto.IdentifiableApi;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;

@@ -21,7 +21,7 @@ public class AuditableEntity extends UUIDIdentifiable {
   @Id
   @GenericGenerator(
     name = "sequence-per-table",
-    strategy = "org.github.yassine.samples.core.PlatformSequenceGeneratorStrategy")
+    strategy = "org.github.yassine.samples.core.persistence.PlatformSequenceGeneratorStrategy")
   private Long id;
   private Instant created;
   @ManyToOne(fetch = FetchType.LAZY)

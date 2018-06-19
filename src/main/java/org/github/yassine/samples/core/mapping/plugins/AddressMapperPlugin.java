@@ -3,7 +3,7 @@ package org.github.yassine.samples.core.mapping.plugins;
 import ma.glasnost.orika.MapperFactory;
 import org.github.yassine.samples.core.mapping.MapperConfigurationPlugin;
 import org.github.yassine.samples.domain.model.shared.AddressInformation;
-import org.github.yassine.samples.dto.AddressApi;
+import org.github.yassine.samples.api.dto.AddressApi;
 
 public class AddressMapperPlugin implements MapperConfigurationPlugin {
   @Override

@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.BoundMapperFacade;
 import org.github.yassine.samples.domain.model.company.Company;
 import org.github.yassine.samples.domain.repository.CompanyRepository;
-import org.github.yassine.samples.dto.CompanyApi;
+import org.github.yassine.samples.api.dto.CompanyApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
