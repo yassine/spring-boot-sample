@@ -1,11 +1,11 @@
 package org.github.yassine.samples.core.mapping.plugins;
 
 import ma.glasnost.orika.MapperFactory;
+import org.github.yassine.samples.api.model.IdentifiableApi;
+import org.github.yassine.samples.api.model.PersonApi;
 import org.github.yassine.samples.core.mapping.MapperConfigurationPlugin;
 import org.github.yassine.samples.domain.model.company.Person;
 import org.github.yassine.samples.domain.model.shared.UUIDIdentifiable;
-import org.github.yassine.samples.api.dto.IdentifiableApi;
-import org.github.yassine.samples.api.dto.PersonApi;
 
 public class PersonMapperPlugin implements MapperConfigurationPlugin {
   @Override

@@ -6,9 +6,9 @@ import org.github.yassine.samples.cli.DbInitCommand;
 import org.github.yassine.samples.cli.DbInstallCommand;
 import org.github.yassine.samples.cli.ServiceCommand;
 
-public class ApplicationCli {
+class ApplicationCli {
 
-  public void run(String... args) {
+  void run(String... args) {
     Cli.CliBuilder<Runnable> cliBuilder = new Cli.CliBuilder<Runnable>("spring-sample-app")
       .withDescription("A demo application backed by spring boot")
       .withDefaultCommand(Help.class)

@@ -30,13 +30,21 @@ project {
     dependency 'com.zaxxer:HikariCP:3.2.0'
     dependency 'io.airlift:airline:0.8'
     dependency 'io.github.lukehutch:fast-classpath-scanner:2.0.8'
+    dependency 'io.projectreactor:reactor-core:3.1.8.RELEASE'
     dependency 'io.reactivex.rxjava2:rxjava:2.1.12'
     dependency 'ma.glasnost.orika:orika-core:1.4.6'
     dependency 'net.jodah:typetools:0.5.0'
+    dependency 'org.apache.commons:commons-lang3:3.7'
+    dependency 'org.apache.httpcomponents:httpclient:4.5.5'
+    dependency 'org.apache.shiro:shiro-web:1.4.0'
+    dependency 'org.apache.shiro:shiro-spring:1.4.0'
     dependency 'org.hibernate:hibernate-core:5.2.10.Final'
+    dependency 'org.keycloak:keycloak-adapter-core:4.0.0.Final'
+    dependency 'org.keycloak:keycloak-core:4.0.0.Final'
     dependency 'org.liquibase:liquibase-core:3.5.3'
     dependency 'org.postgresql:postgresql:9.4.1212.jre7'
     dependency 'org.projectlombok:lombok:1.18.0:provided'
+    dependency 'org.springframework.boot:spring-boot-configuration-processor'
     dependency 'org.springframework.boot:spring-boot-starter-data-jpa'
     dependency 'org.springframework.boot:spring-boot-starter-web'
     dependency 'org.springframework:spring-orm:5.0.7.RELEASE'
@@ -65,7 +73,12 @@ project {
     dependency 'commons-io:commons-io:2.6:test'
     dependency 'com.squareup.okhttp3:okhttp:3.10.0:test'
     dependency 'io.rest-assured:rest-assured:3.1.0:test'
-
+    dependency 'org.keycloak:keycloak-admin-client:4.0.0.Final:test'
+    dependency 'org.jboss.resteasy:resteasy-client:3.5.1.Final:test'
+    dependency 'org.jboss.resteasy:resteasy-jackson2-provider:3.5.1.Final:test'
+    dependency 'com.jayway.jsonpath:json-path:2.3.0:test'
+    dependency 'org.eclipse:yasson:1.0.1:test'
+    dependency 'org.glassfish:javax.json:1.0.4:test'
   }
   build {
     pluginManagement {
@@ -193,9 +206,6 @@ project {
             additionalClasspathElement '${project.basedir}/src/test/resources'
           }
           argLine '${surefireArgLine}'
-          properties {
-            'listener' 'org.github.yassine.samples.TestRunListener'
-          }
         }
       }
       plugin {

@@ -9,14 +9,13 @@ import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-import com.github.dockerjava.api.command.CreateContainerCmd;
-import com.github.dockerjava.api.model.PortBinding;
 import com.google.common.io.Files;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.apache.commons.io.IOUtils;
@@ -24,36 +23,29 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
 
+@Slf4j
 public class RestApiTest {
 
-  @ClassRule
-  public static GenericContainer postgres = new PostgreSQLContainer("postgres:9.6-alpine")
-    .withUsername("dev")
-    .withPassword("dev")
-    .withDatabaseName("spring_boot_sample_db")
-    .withExposedPorts(5432)
-    .withCreateContainerCmdModifier(
-      cmd -> ((CreateContainerCmd) cmd).withPortBindings(PortBinding.parse("5432:5432"))
-    );
-
-  static ConfigurableApplicationContext applicationContext;
-  static File workDir = Files.createTempDir();
-  static File config  = new File(workDir, "application-test.properties");
-  static String id;
+  private static ConfigurableApplicationContext applicationContext;
+  private static File workDir = Files.createTempDir();
+  private static File config  = new File(workDir, "application-test.properties");
+  private static String id;
+  private static String AUTH_TOKEN;
 
   @Test @SneakyThrows
   public void spec(){
     id = given()
       .body(IOUtils.toString(getClass().getResourceAsStream("/fixtures/create-company.json"), defaultCharset()))
       .header("Content-Type","application/json")
+      .header("Authorization","Bearer "+AUTH_TOKEN)
       .when()
       .post("/company")
       .then()
+      .log().all()
       .body("id", notNullValue())
       .body("name", equalTo("my-test-company-1"))
       .body("email", equalTo("my-test-company-1@localhost.com"))
@@ -67,6 +59,7 @@ public class RestApiTest {
     //read
     given()
       .header("Content-Type","application/json")
+      .header("Authorization","Bearer "+AUTH_TOKEN)
       .when()
       .get("/company/"+id)
       .then()
@@ -81,6 +74,7 @@ public class RestApiTest {
     //update
     given()
       .header("Content-Type","application/json")
+      .header("Authorization","Bearer "+AUTH_TOKEN)
       .body(format(IOUtils.toString(getClass().getResourceAsStream("/fixtures/update-company.json"), defaultCharset()), id))
       .when()
       .put("/company")
@@ -96,6 +90,7 @@ public class RestApiTest {
     //read updated
     given()
       .header("Content-Type","application/json")
+      .header("Authorization","Bearer "+AUTH_TOKEN)
       .when()
       .get("/company/"+id)
       .then()
@@ -110,8 +105,9 @@ public class RestApiTest {
 
     //add owner
     String ownerId = given()
-      .body(IOUtils.toString(getClass().getResourceAsStream("/fixtures/create-owner.json"), defaultCharset()))
         .header("Content-Type","application/json")
+        .header("Authorization","Bearer "+AUTH_TOKEN)
+        .body(IOUtils.toString(getClass().getResourceAsStream("/fixtures/create-owner.json"), defaultCharset()))
       .when()
         .post("/company/"+id+"/owner")
       .then()
@@ -125,6 +121,7 @@ public class RestApiTest {
 
     given()
       .header("Content-Type","application/json")
+      .header("Authorization","Bearer "+AUTH_TOKEN)
       .when()
         .get("/company/"+id+"/owner")
       .then()
@@ -137,6 +134,7 @@ public class RestApiTest {
     //delete
     given()
       .header("Content-Type","application/json")
+      .header("Authorization","Bearer "+AUTH_TOKEN)
       .when()
         .delete("/company/"+id)
       .then()
@@ -144,22 +142,25 @@ public class RestApiTest {
 
     given()
         .header("Content-Type","application/json")
+        .header("Authorization","Bearer "+AUTH_TOKEN)
       .when()
         .get("/company/"+id)
       .then()
         .body(equalTo("null"));
   }
 
-
   @BeforeClass @SneakyThrows
   public static void setup(){
+    AUTH_TOKEN = TestUtils.initKeycloak();
     copy(RestApiTest.class.getResourceAsStream("/application-test.properties"), new FileOutputStream(config));
     Properties props = new Properties();
     props.load(RestApiTest.class.getResourceAsStream("/application-test.properties"));
     props.stringPropertyNames()
       .forEach(name -> System.setProperty(name, props.getProperty(name)));
     //await db
-    await().ignoreExceptions().pollInterval(1, TimeUnit.SECONDS).atMost(20, TimeUnit.SECONDS)
+    await().ignoreExceptions()
+      .pollInterval(1, TimeUnit.SECONDS)
+      .atMost(20, TimeUnit.SECONDS)
       .untilAsserted( () ->
         getConnection(props.getProperty("spring.datasource.url"),"dev","dev")
       );
@@ -179,10 +180,17 @@ public class RestApiTest {
           .get().build())
         .execute());
   }
+
   @AfterClass
   public static void tearDown(){
     applicationContext.stop();
-    config.delete();
-    workDir.delete();
+    log.info("removing config file {}", config.delete());
+    log.info("removing temporary dir {}", workDir.delete());
   }
+
+  @ClassRule
+  public static TestRule testRule(){
+    return TestUtils.testRule();
+  }
+
 }

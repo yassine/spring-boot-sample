@@ -8,8 +8,9 @@ import java.util.UUID;
 import javax.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.github.yassine.samples.api.dto.CompanyApi;
-import org.github.yassine.samples.api.dto.PersonApi;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.github.yassine.samples.api.model.CompanyApi;
+import org.github.yassine.samples.api.model.PersonApi;
 import org.github.yassine.samples.domain.service.CompanyService;
 import org.github.yassine.samples.domain.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class CompanyRestController {
     return companyService.update(companyApi);
   }
 
-  @RequestMapping(method = GET)
+  @RequestMapping(method = GET) @RequiresPermissions("TEST")
   Page<CompanyApi> list(@RequestParam(value = "page", defaultValue = "0") Integer page,
                         @RequestParam(value = "size", defaultValue = "10") Integer pageSize) {
     return companyService.list(page, pageSize);

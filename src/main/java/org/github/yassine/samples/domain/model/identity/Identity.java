@@ -8,9 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Cache;
 
-@Entity
+@Entity @Getter @Setter
 public class Identity extends AuditableEntity {
 
   private String externalId;

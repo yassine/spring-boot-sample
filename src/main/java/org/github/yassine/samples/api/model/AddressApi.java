@@ -1,4 +1,4 @@
-package org.github.yassine.samples.api.dto;
+package org.github.yassine.samples.api.model;
 
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
@@ -8,10 +8,11 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class PersonApi extends IdentifiableApi {
+public class AddressApi {
   @NotNull
-  private String firstName;
+  private String streetLine;
   @NotNull
-  private String lastName;
-  private String middleName;
+  private String city;
+  @NotNull
+  private String country;
 }

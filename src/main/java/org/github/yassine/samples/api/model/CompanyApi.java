@@ -1,4 +1,4 @@
-package org.github.yassine.samples.api.dto;
+package org.github.yassine.samples.api.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;

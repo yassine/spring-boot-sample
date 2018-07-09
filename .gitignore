@@ -3,4 +3,5 @@ target/
 # IntelliJ project files
 .idea/
 *.iml
+local-dev.properties
 dev-sonar.properties
