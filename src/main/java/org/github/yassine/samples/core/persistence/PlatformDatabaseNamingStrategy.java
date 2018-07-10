@@ -12,20 +12,20 @@ public class PlatformDatabaseNamingStrategy extends PhysicalNamingStrategyStanda
 
   @Override
   public Identifier toPhysicalColumnName(Identifier name, JdbcEnvironment context) {
-    return canonicalize(name, context);
+    return canonicalize(name);
   }
 
   @Override
   public Identifier toPhysicalSequenceName(Identifier name, JdbcEnvironment context) {
-    return canonicalize(name, context);
+    return canonicalize(name);
   }
 
   @Override
   public Identifier toPhysicalTableName(Identifier name, JdbcEnvironment context) {
-    return canonicalize(name, context);
+    return canonicalize(name);
   }
 
-  private Identifier canonicalize(Identifier name, JdbcEnvironment context) {
+  private Identifier canonicalize(Identifier name) {
     return Identifier.toIdentifier(CaseFormat.UPPER_CAMEL
       .to(CaseFormat.LOWER_UNDERSCORE, name.getText())
       .replaceAll(PATTERN, SEPARATOR).toLowerCase());

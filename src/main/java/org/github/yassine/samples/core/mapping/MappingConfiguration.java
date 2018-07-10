@@ -18,7 +18,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 public class MappingConfiguration implements BeanDefinitionRegistryPostProcessor {
 
   private static final String BOUND_MAPPER_SUFFIX = "BoundMapper";
-  private final Orika orika = new Orika.Builder()
+  private final Orika orika = new Orika.OrikaBuilder()
     .autoDiscover(Application.class.getPackage().getName())
     .register(mpf ->
       mpf.classMap(UUIDIdentifiable.class, IdentifiableApi.class)
@@ -26,9 +26,7 @@ public class MappingConfiguration implements BeanDefinitionRegistryPostProcessor
         .register()
     )
     .build();
-  private final DefaultMapperFactoryArtifact mapperFactory = new DefaultMapperFactoryArtifact.Builder().build();
-
-  private ConfigurableListableBeanFactory beanFactory;
+  private final DefaultMapperFactoryArtifact mapperFactory = new DefaultMapperFactoryArtifact.DefaultMapperFactoryArtifactBuilder().build();
 
   @Override
   public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
@@ -50,7 +48,6 @@ public class MappingConfiguration implements BeanDefinitionRegistryPostProcessor
   public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
     orika.getConverters().forEach(beanFactory::autowireBean);
     orika.getPlugins().forEach(beanFactory::autowireBean);
-    this.beanFactory = beanFactory;
   }
 
 }

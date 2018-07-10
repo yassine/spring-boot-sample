@@ -5,10 +5,7 @@ import static com.google.common.base.Throwables.throwIfUnchecked;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 import lombok.experimental.UtilityClass;
-import org.springframework.core.ParameterizedTypeReference;
 
 @UtilityClass
 public class ReflectionUtils {
@@ -18,13 +15,13 @@ public class ReflectionUtils {
       return clazz.newInstance();
     } catch (Exception e) {
       throwIfUnchecked(e);
-      throw new RuntimeException(e);
+      throw new SampleRuntimeException(e);
     }
   }
 
   public static boolean hasNoArgConstructor(Class clazz) {
     return Arrays.stream(clazz.getDeclaredConstructors())
-      .anyMatch((constructor) -> constructor.getParameterCount() == 0);
+      .anyMatch( constructor -> constructor.getParameterCount() == 0);
   }
 
   public static String toByteCodeName(Type type){
@@ -51,11 +48,5 @@ public class ReflectionUtils {
     }
     return result;
   }
-
-  public static void main(String... args){
-    ParameterizedTypeReference ref = new ParameterizedTypeReference<List<Set<String>>>(){};
-    System.out.println(toByteCodeName(ref.getType()));
-  }
-
 
 }

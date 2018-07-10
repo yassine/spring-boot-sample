@@ -20,40 +20,40 @@ class Orika {
   private final Set<Converter> converters;
   private final Set<MapperConfigurationPlugin> plugins;
 
-  static class Builder {
+  static class OrikaBuilder {
 
     private final Set<MapperConfigurationPlugin> plugins = Sets.newHashSet();
     private final Set<Converter> converters = Sets.newHashSet();
     private final List<String> autoDiscoverPackages = Lists.newArrayList();
 
-    public Builder registerDefaultMapper(Class<?> from, Class<?> to) {
+    public OrikaBuilder registerDefaultMapper(Class<?> from, Class<?> to) {
       plugins.add(DefaultMapperConfigurationPlugin.of(from, to));
       return this;
     }
 
-    public Builder register(MapperConfigurationPlugin mappingPlugin) {
+    public OrikaBuilder register(MapperConfigurationPlugin mappingPlugin) {
       plugins.add(mappingPlugin);
       return this;
     }
 
-    public Builder registerConverter(Converter converter) {
+    public OrikaBuilder registerConverter(Converter converter) {
       converters.add(converter);
       return this;
     }
 
-    public Builder autoDiscover(String... packages) {
+    public OrikaBuilder autoDiscover(String... packages) {
       autoDiscoverPackages.addAll(Arrays.asList(packages));
       return this;
     }
 
     public Orika build() {
       autoDiscoverPackages.stream()
-        .map((packageName) ->
+        .map( packageName ->
           scanAndInstantiateImplementations(Converter.class, packageName))
         .flatMap(Set::stream)
         .forEach(converters::add);
       autoDiscoverPackages.stream()
-        .map((packageName) ->
+        .map( packageName ->
           scanAndInstantiateImplementations(MapperConfigurationPlugin.class, packageName))
         .flatMap(Set::stream)
         .forEach(plugins::add);

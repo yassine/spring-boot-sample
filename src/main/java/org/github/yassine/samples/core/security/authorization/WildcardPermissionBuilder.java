@@ -3,7 +3,6 @@ package org.github.yassine.samples.core.security.authorization;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableSet.copyOf;
 import static com.google.common.collect.Sets.union;
-import static java.lang.String.format;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSet;
@@ -70,12 +69,12 @@ public class WildcardPermissionBuilder {
    * @return the list of permissions
    */
   public Set<String> build() {
-    checkState(resources.size() > 0,
-        format("At least one resource is required. Permission : %s",getStringPermission()));
-    checkState(scopes.size() > 0,
-        format("At least one scope is required. Permission : %s",getStringPermission()));
-    checkState(actions.size() > 0,
-        format("At least one action is required. Permission : %s",getStringPermission()));
+    checkState( !resources.isEmpty(),
+        "At least one resource is required. Permission : %s", getStringPermission());
+    checkState( !scopes.isEmpty(),
+        "At least one scope is required. Permission : %s", getStringPermission());
+    checkState( !actions.isEmpty(),
+        "At least one action is required. Permission : %s", getStringPermission());
     if (parent == null) {
       return build(new HashSet<>());
     } else {

@@ -22,18 +22,27 @@ import org.springframework.stereotype.Component;
 @Order(500)
 public class RequestAuthenticatorFilter implements Filter {
 
-  private final Set<RequestAuthenticator> requestAuthenticator;
+  private final Set<RequestAuthenticator> requestAuthenticators;
 
   public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-    fromIterable(requestAuthenticator)
-      .flatMapMaybe(requestAuthenticator -> requestAuthenticator.authenticate(servletRequest).onErrorComplete())
+    fromIterable(requestAuthenticators)
+      .flatMapMaybe( requestAuthenticator -> requestAuthenticator.authenticate(servletRequest)
+        .onErrorComplete())
       .blockingSubscribe(SecurityUtils.getSubject()::login);
     filterChain.doFilter(servletRequest, servletResponse);
   }
 
   @Override
-  public void init(FilterConfig filterConfig) throws ServletException {}
+  public void init(FilterConfig filterConfig) throws ServletException {
+    /*
+      No initialization needed.
+    */
+  }
   @Override
-  public void destroy() {}
+  public void destroy() {
+    /*
+      Not needed
+    */
+  }
 
 }

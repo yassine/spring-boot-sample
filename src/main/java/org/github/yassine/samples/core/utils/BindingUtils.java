@@ -76,9 +76,9 @@ public class BindingUtils {
     private final Class<T> contract;
     private final Set<Class<? extends T>> implementations;
     private final Supplier<ConfigurableBeanFactory> configurableBeanFactory;
-    private final static String KEY = "";
+    private static final String KEY = "";
 
-    private final LoadingCache<String, Set<T>> CACHE = CacheBuilder.newBuilder().build(new CacheLoader<String, Set<T>>() {
+    private final LoadingCache<String, Set<T>> cache = CacheBuilder.newBuilder().build(new CacheLoader<String, Set<T>>() {
       @SuppressWarnings("unchecked")
       @Override
       public Set<T> load(String s) throws Exception {
@@ -91,7 +91,7 @@ public class BindingUtils {
 
     @Override @SneakyThrows
     public ImmutableSet<T> get() {
-      return ImmutableSet.copyOf(CACHE.get(KEY));
+      return ImmutableSet.copyOf(cache.get(KEY));
     }
 
   }

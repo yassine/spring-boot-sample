@@ -7,7 +7,6 @@ import org.apache.shiro.realm.Realm;
 import org.github.yassine.samples.core.security.authentication.KeycloakAuthenticatingRealm;
 import org.github.yassine.samples.core.security.authentication.KeycloakRequestAuthenticatorSupport;
 import org.github.yassine.samples.core.security.authentication.RequestAuthenticator;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
@@ -18,7 +17,7 @@ public class SecurityPostBeanProcessor implements BeanDefinitionRegistryPostProc
   private ConfigurableListableBeanFactory beanFactory;
 
   @Override
-  public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+  public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
     bindMultiContractImplementation(
       registry,
       RequestAuthenticator.class,
@@ -36,7 +35,7 @@ public class SecurityPostBeanProcessor implements BeanDefinitionRegistryPostProc
   }
 
   @Override
-  public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+  public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
     this.beanFactory = beanFactory;
   }
 }

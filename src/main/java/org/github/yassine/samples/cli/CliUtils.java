@@ -15,9 +15,10 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.ResourceAccessor;
 import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Slf4j @UtilityClass
 class CliUtils {
 
   static Properties getProps(String path) {

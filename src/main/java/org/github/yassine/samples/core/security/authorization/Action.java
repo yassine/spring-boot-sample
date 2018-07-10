@@ -12,6 +12,7 @@ public enum Action {
 
   private final String name;
 
+  @Override
   public String toString(){
     return name;
   }

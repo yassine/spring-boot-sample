@@ -14,7 +14,7 @@ public class ScanUtils {
                                                                         String... packages) {
     ImmutableSet.Builder<Class<I>> items = ImmutableSet.builder();
     FastClasspathScanner scanner = new FastClasspathScanner(packages);
-    scanner.matchClassesImplementing(clazz, (impl) -> items.add((Class<I>) impl));
+    scanner.matchClassesImplementing(clazz, impl -> items.add((Class<I>) impl));
     scanner.scan();
     return items.build();
   }
@@ -24,7 +24,7 @@ public class ScanUtils {
                                                                           String... packages) {
     return ImmutableSet.copyOf(scanForImplementationsOf(contractClass, packages)).stream()
       .filter(ReflectionUtils::hasNoArgConstructor)
-      .map((implementation) -> (I) ReflectionUtils.instantiate(implementation))
+      .map( implementation -> (I) ReflectionUtils.instantiate(implementation))
       .collect(Collectors.toSet());
   }
 

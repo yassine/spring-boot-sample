@@ -8,6 +8,12 @@ project {
     artifactId 'spring-boot-starter-parent'
     version '2.0.3.RELEASE'
   }
+  licenses {
+    license {
+      name 'The Apache License, Version 2.0'
+      url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    }
+  }
   properties{
     'project.build.sourceEncoding' 'UTF-8'
     'sonar.jacoco.reportPaths' '${project.build.directory}/coverage-reports/jacoco-ut.exec'

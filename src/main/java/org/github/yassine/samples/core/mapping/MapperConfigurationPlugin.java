@@ -10,7 +10,7 @@ import ma.glasnost.orika.metadata.ClassMapBuilder;
 public interface MapperConfigurationPlugin extends Consumer<MapperFactory> {
 
   static MapperConfigurationPlugin defaultOf(Class<?> domainClass, Class<?> apiClass) {
-    return (mapperFactory) -> {
+    return mapperFactory -> {
       ClassMapBuilder<?, ?> builder = mapperFactory.classMap(domainClass, apiClass);
       builder.byDefault();
       builder.register();
@@ -21,7 +21,7 @@ public interface MapperConfigurationPlugin extends Consumer<MapperFactory> {
                                                   Class<?> apiClass,
                                                   Class<?> parentDomainClass,
                                                   Class<?> parentApiClass) {
-    return (mapperFactory) -> {
+    return mapperFactory -> {
       ClassMapBuilder<?, ?> builder = mapperFactory.classMap(domainClass, apiClass);
       builder.use(parentDomainClass, parentApiClass);
       builder.byDefault();

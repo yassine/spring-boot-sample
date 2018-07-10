@@ -2,7 +2,6 @@ package org.github.yassine.samples.core.security.authentication;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
@@ -17,13 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired), access = AccessLevel.PUBLIC)
 public class KeycloakAuthenticatingRealm extends AuthenticatingRealm {
 
-  private final static String NAME = "KEYCLOAK";
+  private static final String NAME = "KEYCLOAK";
 
   private final IdentityRepository identityRepository;
   private final IdentityProviderRepository identityProviderRepository;
 
   @Override
-  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
     KeycloakAuthenticationToken keycloakAuthenticationToken = (KeycloakAuthenticationToken) token;
     SimpleAuthenticationInfo authInfo    = new SimpleAuthenticationInfo();
     SimplePrincipalCollection principals = new SimplePrincipalCollection();

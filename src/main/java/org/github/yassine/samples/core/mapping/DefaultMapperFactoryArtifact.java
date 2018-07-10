@@ -15,7 +15,7 @@ public class DefaultMapperFactoryArtifact extends DefaultMapperFactory {
     return classMapRegistry;
   }
 
-  public static class Builder extends DefaultMapperFactory.Builder {
+  public static class DefaultMapperFactoryArtifactBuilder extends DefaultMapperFactory.Builder {
     @Override
     public DefaultMapperFactoryArtifact build() {
       return new DefaultMapperFactoryArtifact(this);
