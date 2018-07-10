@@ -32,7 +32,7 @@ public class RoleAuthorizationRealm extends AuthorizingRealm {
       @Override
       public Collection<String> getStringPermissions() {
         return getRoles().stream().map(Role::valueOf)
-                .map(Role::getPermission)
+                .map(Role::getPermissions)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());
       }

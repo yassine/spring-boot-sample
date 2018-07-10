@@ -26,5 +26,5 @@ public enum Role {
       .build()
   );
   @Getter
-  private final Set<String> permission;
+  private final Set<String> permissions;
 }

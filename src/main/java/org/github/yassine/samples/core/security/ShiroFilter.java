@@ -17,7 +17,6 @@ public class ShiroFilter extends AbstractShiroFilter {
 
   private final WebSecurityManager webSecurityManager;
 
-
   @Override
   public void init() throws Exception {
     setSecurityManager(webSecurityManager);

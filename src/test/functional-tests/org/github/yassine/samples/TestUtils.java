@@ -32,26 +32,6 @@ public class TestUtils {
   private final static String  AUTH_HOST = "localhost";
 
   @SneakyThrows
-  public void test(){
-    String response =new OkHttpClient.Builder().build().newCall(new Request.Builder()
-      .url(String.format("http://%s:%s/auth/realms/%s/protocol/openid-connect/token", AUTH_HOST, AUTH_PORT, AUTH_REALM_NAME))
-      .header("Content-Type", "application/x-www-form-urlencoded")
-      .post(new FormBody.Builder()
-        .add("username", AUTH_USER_NAME)
-        .add("password", AUTH_USER_PASS)
-        .add("grant_type", "password")
-        .add("client_id", "project-management")
-        .add("client_secret", "43753a80-e884-4676-aec4-08224ab59900")
-        .build()).build())
-      .execute().body().string();
-    System.out.println(response);
-
-    String token = JsonPath.read(Configuration.defaultConfiguration().jsonProvider().parse(response), "$.access_token");
-
-    System.out.println(token);
-  }
-
-  @SneakyThrows
   public static String initKeycloak(){
     addUsers();
     Keycloak adminKeycloak = Keycloak
@@ -62,21 +42,6 @@ public class TestUtils {
       }
     });
     return getAccessToken();
-    /*
-    AdapterConfig adapterConfig = new AdapterConfig();
-    adapterConfig.setRealm("test-realm");
-    adapterConfig.setResource("test-client");
-    adminKeycloak.realms().realm("test-realm").keys().getKeyMetadata().getKeys().forEach(key -> {
-      if(key.getPublicKey() != null){
-        adapterConfig.setRealmKey(key.getPublicKey());
-        System.setProperty("keycloak.deployment.publicKey", key.getPublicKey());
-      }
-    });
-    adapterConfig.setAuthServerUrl("http://localhost:8090/auth");
-    adapterConfig.setPublicClient(true);
-    KeycloakDeployment deployment = KeycloakDeploymentBuilder.build(adapterConfig);
-    RSATokenVerifier.verifyToken(token, deployment.getPublicKeyLocator().getPublicKey("", null), deployment.getRealmInfoUrl());
-    */
   }
 
 
