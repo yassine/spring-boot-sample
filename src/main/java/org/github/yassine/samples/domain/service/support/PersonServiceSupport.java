@@ -27,10 +27,10 @@ public class PersonServiceSupport implements PersonService {
 
   private final CompanyRepository companyRepository;
   private final PersonRepository personRepository;
-  private final BoundMapperFacade<PersonApi, Person> personBoundMapperFacade;
+  private final BoundMapperFacade<PersonApi, Person> mapper;
 
   public PersonApi addCompanyOwner(UUID companyId, PersonApi personApi) {
-    Person person = personBoundMapperFacade.map(personApi);
+    Person person = mapper.map(personApi);
     personRepository.save(person);
     return addCompanyOwner(companyId, person);
   }
@@ -41,13 +41,18 @@ public class PersonServiceSupport implements PersonService {
         format("Unable to find company with id : '%s'", companyId)));
     company.getOwners().add(person);
     companyRepository.save(company);
-    return personBoundMapperFacade.mapReverse(person);
+    return mapper.mapReverse(person);
+  }
+
+  @Override
+  public Optional<PersonApi> findByUUID(UUID uuid) {
+    return personRepository.findByUuid(uuid).map(mapper::mapReverse);
   }
 
   @Transactional
   public Optional<List<PersonApi>> getOwners(UUID companyId) {
     return companyRepository.findByUuid(companyId).map(Company::getOwners)
-      .map(owners -> owners.stream().map(personBoundMapperFacade::mapReverse)
+      .map(owners -> owners.stream().map(mapper::mapReverse)
         .collect(Collectors.toList()));
   }
 

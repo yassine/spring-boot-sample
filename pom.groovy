@@ -31,12 +31,13 @@ project {
   dependencies {
     dependency 'com.google.auto.service:auto-service:1.0-rc3'
     dependency 'com.google.guava:guava:24.1-jre'
+    dependency 'com.graphql-java:graphql-java-servlet:6.1.3'
+    dependency 'io.github.graphql-java:graphql-java-annotations:6.1'
     dependency 'com.hazelcast:hazelcast-hibernate52:1.1.1'
     dependency 'com.hazelcast:hazelcast:3.8.3'
     dependency 'com.zaxxer:HikariCP:3.2.0'
     dependency 'io.airlift:airline:0.8'
     dependency 'io.github.lukehutch:fast-classpath-scanner:2.0.8'
-    dependency 'io.projectreactor:reactor-core:3.1.8.RELEASE'
     dependency 'io.reactivex.rxjava2:rxjava:2.1.12'
     dependency 'ma.glasnost.orika:orika-core:1.4.6'
     dependency 'net.jodah:typetools:0.5.0'
@@ -73,7 +74,7 @@ project {
     dependency 'org.codehaus.groovy:groovy-all:2.4.13:test'
     dependency 'org.spockframework:spock-core:1.1-groovy-2.4:test'
     dependency 'org.spockframework:spock-guice:1.1-groovy-2.4:test'
-    dependency 'org.testcontainers:testcontainers:1.8.0:test'
+    dependency 'org.testcontainers:testcontainers:1.10.6:test'
     dependency 'org.testcontainers:postgresql:1.8.0:test'
     dependency 'org.awaitility:awaitility:3.0.0:test'
     dependency 'commons-io:commons-io:2.6:test'
@@ -91,22 +92,61 @@ project {
       plugins {
         plugin {
           artifactId 'maven-compiler-plugin'
-          version '3.7.0'
+          version '3.8.0'
           configuration {
-            source '8'
-            target '8'
+            release '8'
           }
         }
       }
     }
     plugins {
       plugin {
+        groupId 'org.codehaus.mojo'
+        artifactId 'build-helper-maven-plugin'
+        version '1.9.1'
+        executions {
+          execution {
+            id 'add-source'
+            phase 'generate-test-sources'
+            goals {
+              goal 'add-test-source'
+            }
+            configuration {
+              sources {
+                source 'src/test/functional-tests'
+                source 'src/test/unit-tests'
+              }
+            }
+          }
+        }
+      }
+      plugin {
         artifactId 'maven-compiler-plugin'
+        executions {
+          execution{
+            id 'compile-functional-tests'
+            goals {
+              goal 'testCompile'
+            }
+            configuration {
+              testSource 'src/test/functional-tests'
+            }
+          }
+          execution{
+            id 'compile-unit-tests'
+            goals {
+              goal 'testCompile'
+            }
+            configuration {
+              testSource 'src/test/unit-tests'
+            }
+          }
+        }
       }
       plugin {
         groupId 'org.jacoco'
         artifactId 'jacoco-maven-plugin'
-        version '0.8.0'
+        version '0.8.3'
         executions {
           execution {
             id 'prepare-agent'
@@ -133,51 +173,8 @@ project {
         }
       }
       plugin {
-        groupId 'org.codehaus.gmavenplus'
-        artifactId 'gmavenplus-plugin'
-        version '1.6'
-        executions {
-          execution {
-            id 'generate-unit-tests'
-            goals {
-              goal 'compileTests'
-              goal 'addTestSources'
-            }
-            configuration {
-              testSources {
-                testSource {
-                  directory '${project.basedir}/src/test/unit-tests'
-                  includes {
-                    include '**/*.groovy'
-                  }
-                }
-              }
-              outputDirectory '${project.build.directory}/unit-tests'
-            }
-          }
-          execution {
-            id 'generate-functional-tests'
-            goals {
-              goal 'compileTests'
-              goal 'addTestSources'
-            }
-            configuration {
-              testSources {
-                testSource {
-                  directory '${project.basedir}/src/test/functional-tests'
-                  includes {
-                    include '**/*.groovy'
-                  }
-                }
-              }
-              outputDirectory '${project.build.directory}/functional-tests'
-            }
-          }
-        }
-      }
-      plugin {
         artifactId 'maven-surefire-plugin'
-        version '2.20.1'
+        version '3.0.0-M3'
         executions {
           execution {
             id 'functional-tests'
@@ -185,16 +182,7 @@ project {
               goal 'test'
             }
             configuration {
-              testClassesDirectory '${project.build.directory}/functional-tests'
-              testSourceDirectory '{project.basedir}/src/test/functional-tests'
-            }
-          }
-          execution {
-            id 'default-tests'
-            goals {
-              goal 'test'
-            }
-            configuration {
+              testSourceDirectory '${project.basedir}/src/test/functional-tests'
               testClassesDirectory '${project.build.directory}/test-classes'
             }
           }
@@ -202,7 +190,7 @@ project {
         configuration{
           useFile 'false'
           testClassesDirectory '${project.build.directory}/unit-tests'
-          testSourceDirectory '{project.basedir}/src/test/unit-tests'
+          testSourceDirectory '${project.basedir}/src/test/unit-tests'
           includes {
             include '**/*Spec'
             include '**/*Test'
@@ -211,7 +199,7 @@ project {
             additionalClasspathElement '${project.build.testOutputDirectory}'
             additionalClasspathElement '${project.basedir}/src/test/resources'
           }
-          argLine '${surefireArgLine}'
+          argLine '${surefireArgLine} '//--add-modules java.xml.bind
         }
       }
       plugin {
@@ -226,7 +214,7 @@ project {
       plugin {
         groupId 'org.codehaus.mojo'
         artifactId 'sonar-maven-plugin'
-        version '3.4.0.905'
+        version '3.6.0.1398'
       }
       plugin {
         groupId 'org.codehaus.mojo'
@@ -242,6 +230,52 @@ project {
               quiet 'true'
               files {
                 file '${project.basedir}/dev-sonar.properties'
+              }
+            }
+          }
+        }
+      }
+      plugin {
+        groupId 'org.apache.maven.plugins'
+        artifactId 'maven-shade-plugin'
+        configuration {
+          'createDependencyReducedPom' true
+          keepDependenciesWithProvidedScope true
+          filters {
+            filter {
+              artifact '*:*'
+              excludes {
+                exclude 'META-INF/*.SF'
+                exclude 'META-INF/*.DSA'
+                exclude 'META-INF/*.RSA'
+              }
+            }
+          }
+        }
+        dependencies {
+          dependency 'org.springframework.boot:spring-boot-maven-plugin:1.2.7.RELEASE'
+        }
+        executions {
+          execution{
+            phase 'package'
+            goals {
+              goal 'shade'
+            }
+            configuration {
+              transformers('combine.self':'override', 'combine.children':'override') {
+                transformer(implementation:'org.apache.maven.plugins.shade.resource.ServicesResourceTransformer') {}
+                transformer(implementation:'org.apache.maven.plugins.shade.resource.ManifestResourceTransformer') {
+                  mainClass 'org.github.yassine.samples.Application'
+                }
+                transformer(implementation:'org.apache.maven.plugins.shade.resource.AppendingTransformer') {
+                  resource 'META-INF/spring.handlers'
+                }
+                transformer(implementation:'org.apache.maven.plugins.shade.resource.AppendingTransformer') {
+                  resource 'META-INF/spring.schemas'
+                }
+                transformer(implementation:'org.springframework.boot.maven.PropertiesMergingResourceTransformer') {
+                  resource 'META-INF/spring.factories'
+                }
               }
             }
           }

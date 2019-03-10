@@ -6,8 +6,7 @@ import static java.nio.charset.Charset.defaultCharset;
 import static java.sql.DriverManager.getConnection;
 import static org.apache.commons.io.IOUtils.copy;
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 import com.google.common.io.Files;
 import java.io.File;
@@ -135,18 +134,50 @@ public class RestApiTest {
     given()
       .header("Content-Type","application/json")
       .header("Authorization","Bearer "+AUTH_TOKEN)
-    .when()
+      .when()
       .delete("/company/"+id)
-    .then()
+      .then()
       .statusCode(200);
 
     given()
       .header("Content-Type","application/json")
       .header("Authorization","Bearer "+AUTH_TOKEN)
-    .when()
+      .when()
       .get("/company/"+id)
-    .then()
+      .then()
       .body(equalTo("null"));
+
+  }
+
+  @SneakyThrows @Test
+  public void graphqlSpec(){
+
+    id = given()
+      .body(IOUtils.toString(getClass().getResourceAsStream("/fixtures/create-company.json"), defaultCharset()))
+      .header("Content-Type","application/json")
+      .header("Authorization","Bearer "+AUTH_TOKEN)
+      .when()
+      .post("/company")
+      .then()
+      .log().all()
+      .extract()
+      .path("id");
+
+    given()
+      .header("Content-Type","application/json")
+      .header("Authorization","Bearer "+AUTH_TOKEN)
+      .body(format(IOUtils.toString(getClass().getResourceAsStream("/fixtures/company.graphql.query"), defaultCharset()), id))
+      .when()
+      .post("/graphql")
+      .then()
+      .log().all()
+      .body("data.company.id", equalTo(id))
+      .body("data.company.name", equalTo("my-test-company-1"))
+      .body("data.company.email", equalTo("my-test-company-1@localhost.com"))
+      .body("data.company.phone", equalTo("000"))
+      .body("data.company.address.city", equalTo("Madrid"))
+      .body("data.company.address.streetLine", nullValue())//not requested by the query
+      .body("data.company.address.country", nullValue());//not requested by the query
   }
 
   @BeforeClass @SneakyThrows

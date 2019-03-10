@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.bytecode.SignatureAttribute;
@@ -30,6 +31,7 @@ public class BindingUtils {
   public static GenericBeanDefinition bindParametrizedType(Class rawType, Type type, Supplier<?> instanceSupplier) {
     final ClassPool defaultClassPool = ClassPool.getDefault();
     String generatedClassName = getName(rawType);
+    defaultClassPool.insertClassPath(new ClassClassPath(rawType));
     CtClass contractCtClass = defaultClassPool.getCtClass(rawType.getName());
     CtClass generatedCtClass = rawType.isInterface()
       ? defaultClassPool.makeInterface(generatedClassName, contractCtClass)

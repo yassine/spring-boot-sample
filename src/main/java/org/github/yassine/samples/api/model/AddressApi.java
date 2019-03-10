@@ -1,5 +1,6 @@
 package org.github.yassine.samples.api.model;
 
+import graphql.annotations.annotationTypes.GraphQLField;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,10 +10,10 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 public class AddressApi {
-  @NotNull
+  @NotNull @GraphQLField
   private String streetLine;
-  @NotNull
+  @NotNull @GraphQLField
   private String city;
-  @NotNull
+  @NotNull @GraphQLField
   private String country;
 }

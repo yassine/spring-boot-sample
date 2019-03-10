@@ -9,5 +9,6 @@ import org.github.yassine.samples.domain.model.company.Person;
 public interface PersonService {
   PersonApi addCompanyOwner(UUID companyId, PersonApi personApi);
   PersonApi addCompanyOwner(UUID companyId, Person person);
+  Optional<PersonApi> findByUUID(UUID uuid);
   Optional<List<PersonApi>> getOwners(UUID companyId);
 }

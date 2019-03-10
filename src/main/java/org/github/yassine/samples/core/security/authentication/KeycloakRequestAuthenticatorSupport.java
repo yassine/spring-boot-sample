@@ -39,16 +39,15 @@ public class KeycloakRequestAuthenticatorSupport implements RequestAuthenticator
       .filter(parts -> parts[0].equalsIgnoreCase(BEARER_HEADER))
       .map(parts -> parts[1])
       .findAny()
+      .map(Maybe::just)
+      .orElse(Maybe.empty())
       .map( token -> sneak().get(() ->
         verifyToken(token,
           keycloakDeployment.getPublicKeyLocator().getPublicKey("", null),
           keycloakDeployment.getRealmInfoUrl())
         )
       )
-      .map(KeycloakAuthenticationToken::new)
-      .map(token -> (AuthenticationToken) token)
-      .map(Maybe::just)
-      .orElse(Maybe.empty());
+      .map(KeycloakAuthenticationToken::new);
   }
 
 }

@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:latest
 
 ENV KEYCLOAK_VERSION 4.0.0.Final
 ENV KEYCLOAK_USER dev

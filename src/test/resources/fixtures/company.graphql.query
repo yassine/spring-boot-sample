@@ -1,0 +1,3 @@
+{
+  "query":" { company(uuid:\"%s\") { id , name, email, phone, address { city } } } "
+}

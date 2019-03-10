@@ -36,11 +36,6 @@ databaseChangeLog:
                         last_modified_by_id = (SELECT id FROM public.identity WHERE uuid = '11111111-1111-1111-1111-111111111111'),
                         tenant_id = (SELECT id FROM public.identity WHERE uuid = '11111111-1111-1111-1111-111111111111')
                     WHERE uuid = '11111111-1111-1111-1111-111111111111';
-        - sql:
-            comment: Update System Identity tenant
-            sql: UPDATE public.identity
-                    SET tenant_id = (SELECT id FROM public.identity WHERE uuid = '00000000-0000-0000-0000-000000000000')
-                    WHERE uuid = '00000000-0000-0000-0000-000000000000';
   - changeSet:
       id: add-system-user-roles
       author: yassine

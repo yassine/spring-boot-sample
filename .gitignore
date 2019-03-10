@@ -2,6 +2,10 @@
 target/
 # IntelliJ project files
 .idea/
+.terraform/
 *.iml
 local-dev.properties
 dev-sonar.properties
+dependency-reduced-pom.xml
+*.tf
+terraform.tfstate

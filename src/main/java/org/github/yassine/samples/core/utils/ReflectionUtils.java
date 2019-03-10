@@ -12,7 +12,7 @@ public class ReflectionUtils {
 
   public static Object instantiate(Class<?> clazz) {
     try {
-      return clazz.newInstance();
+      return clazz.getDeclaredConstructor().newInstance();
     } catch (Exception e) {
       throwIfUnchecked(e);
       throw new SampleRuntimeException(e);
