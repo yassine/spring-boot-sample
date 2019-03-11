@@ -92,9 +92,10 @@ project {
       plugins {
         plugin {
           artifactId 'maven-compiler-plugin'
-          version '3.8.0'
+          version '3.7.0'
           configuration {
-            release '8'
+            source '8'
+            target '8'
           }
         }
       }
@@ -122,26 +123,6 @@ project {
       }
       plugin {
         artifactId 'maven-compiler-plugin'
-        executions {
-          execution{
-            id 'compile-functional-tests'
-            goals {
-              goal 'testCompile'
-            }
-            configuration {
-              testSource 'src/test/functional-tests'
-            }
-          }
-          execution{
-            id 'compile-unit-tests'
-            goals {
-              goal 'testCompile'
-            }
-            configuration {
-              testSource 'src/test/unit-tests'
-            }
-          }
-        }
       }
       plugin {
         groupId 'org.jacoco'
