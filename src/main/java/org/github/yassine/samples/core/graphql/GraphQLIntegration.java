@@ -34,9 +34,6 @@ public class GraphQLIntegration {
         .dataFetcher( context -> queryService.company(UUID.fromString(context.getArgument("uuid"))))
       )
       .build();
-
-
-
     return schemaBuilder.query(querytype).build();
   }
 
