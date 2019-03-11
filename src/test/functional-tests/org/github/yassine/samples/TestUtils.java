@@ -40,10 +40,7 @@ public class TestUtils {
       .getInstance("http://localhost:8090/auth","master", "admin", "admin", "admin-cli");
     adminKeycloak.realms().realm("test-realm").keys().getKeyMetadata().getKeys().forEach(key -> {
       if(key.getPublicKey() != null){
-        System.out.println(key.getPublicKey());
         System.setProperty("keycloak.deployment.publicKey", key.getPublicKey());
-      }else{
-        System.out.println("###################################################################");
       }
     });
     return getAccessToken();
