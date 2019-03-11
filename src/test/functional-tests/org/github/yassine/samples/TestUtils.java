@@ -31,7 +31,7 @@ public class TestUtils {
   private final static String AUTH_USER_PASS = "dev-user";
   private final static Integer AUTH_PORT = 8090;
   private final static String  AUTH_HOST = "localhost";
-  private final static Integer POSTGRES_PORT = 15432;
+  private final static Integer APP_POSTGRES_PORT = 15432;
 
   @SneakyThrows
   public static String initKeycloak(){
@@ -40,7 +40,10 @@ public class TestUtils {
       .getInstance("http://localhost:8090/auth","master", "admin", "admin", "admin-cli");
     adminKeycloak.realms().realm("test-realm").keys().getKeyMetadata().getKeys().forEach(key -> {
       if(key.getPublicKey() != null){
+        System.out.println(key.getPublicKey());
         System.setProperty("keycloak.deployment.publicKey", key.getPublicKey());
+      }else{
+        System.out.println("###################################################################");
       }
     });
     return getAccessToken();
@@ -69,7 +72,6 @@ public class TestUtils {
             .map(entry -> entry.getValue().getIpAddress())
             .get()
           )
-          .put("POSTGRES_PORT_5432_TCP_PORT", format("%s", POSTGRES_PORT))
           .put("POSTGRES_USER", "dev")
           .put("POSTGRES_PASSWORD", "dev")
           .put("POSTGRES_DATABASE", "keycloak-db")
@@ -84,17 +86,17 @@ public class TestUtils {
       );
 
 
-    GenericContainer postgres = new PostgreSQLContainer("postgres:9.6-alpine")
+    GenericContainer app_postgres_db = new PostgreSQLContainer("postgres:9.6-alpine")
       .withUsername("dev")
       .withPassword("dev")
       .withDatabaseName("spring_boot_sample_db")
-      .withExposedPorts(POSTGRES_PORT)
+      .withExposedPorts(APP_POSTGRES_PORT, 5432)
       .withCreateContainerCmdModifier(
-        cmd -> ((CreateContainerCmd) cmd).withPortBindings(PortBinding.parse(format("%s:%s", POSTGRES_PORT, POSTGRES_PORT)))
+        cmd -> ((CreateContainerCmd) cmd).withPortBindings(PortBinding.parse(format("%s:%s", APP_POSTGRES_PORT, 5432)))
       );
 
     return RuleChain.outerRule(keycloak)
-            .around(postgres);
+            .around(app_postgres_db);
   }
 
   @SneakyThrows
