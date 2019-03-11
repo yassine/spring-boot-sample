@@ -23,7 +23,7 @@ project {
     'sonar.projectKey' 'com.github.yassine:spring-boot-sample'
     'sonar.projectName' 'spring-boot-sample'
     'sonar.projectVersion' '${project.version}'
-    'sonar.tests' '${project.basedir}/src/test/unit-tests,${project.basedir}/src/test/functional-tests'
+    'sonar.tests' '${project.basedir}/src/test/functional-tests'
     'version.hikari' '2.6.2'
     'version.jersey' '2.22.2'
   }
