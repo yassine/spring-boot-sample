@@ -30,38 +30,38 @@ public class CompanyRestController {
   private final PersonService personService;
 
   @RequestMapping(method = POST)
-  CompanyApi onCreate(@Valid @RequestBody CompanyApi companyApi) {
+  public CompanyApi onCreate(@Valid @RequestBody CompanyApi companyApi) {
     return companyService.save(companyApi);
   }
 
   @RequestMapping(method = PUT)
-  Optional<CompanyApi> onUpdate(@Valid @RequestBody CompanyApi companyApi) {
+  public Optional<CompanyApi> onUpdate(@Valid @RequestBody CompanyApi companyApi) {
     return companyService.update(companyApi);
   }
 
   @RequestMapping(method = GET) @RequiresPermissions("TEST")
-  Page<CompanyApi> list(@RequestParam(value = "page", defaultValue = "0") Integer page,
+  public Page<CompanyApi> list(@RequestParam(value = "page", defaultValue = "0") Integer page,
                         @RequestParam(value = "size", defaultValue = "10") Integer pageSize) {
     return companyService.list(page, pageSize);
   }
 
   @RequestMapping(method = DELETE, value = "/{companyId}")
-  void onDelete(@PathVariable UUID companyId) {
+  public void onDelete(@PathVariable UUID companyId) {
     companyService.delete(companyId);
   }
 
   @RequestMapping(value = "/{companyId}", method = GET)
-  Optional<CompanyApi> get(@PathVariable UUID companyId) {
+  public Optional<CompanyApi> get(@PathVariable UUID companyId) {
     return companyService.findByUuid(companyId);
   }
 
   @RequestMapping(value = "/{companyId}/owner", method = POST)
-  PersonApi onOwnerAdd(@Valid @RequestBody PersonApi personApi, @PathVariable UUID companyId) {
+  public PersonApi onOwnerAdd(@Valid @RequestBody PersonApi personApi, @PathVariable UUID companyId) {
     return personService.addCompanyOwner(companyId, personApi);
   }
 
   @RequestMapping(value = "/{companyId}/owner", method = GET)
-  Optional<List<PersonApi>> owners(@PathVariable UUID companyId) {
+  public Optional<List<PersonApi>> owners(@PathVariable UUID companyId) {
     return personService.getOwners(companyId);
   }
 }
