@@ -1,6 +1,7 @@
 package org.github.yassine.samples;
 
 import static com.google.common.collect.ImmutableMap.builder;
+import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 
 import com.github.dockerjava.api.command.CreateContainerCmd;
@@ -30,6 +31,7 @@ public class TestUtils {
   private final static String AUTH_USER_PASS = "dev-user";
   private final static Integer AUTH_PORT = 8090;
   private final static String  AUTH_HOST = "localhost";
+  private final static Integer POSTGRES_PORT = 15432;
 
   @SneakyThrows
   public static String initKeycloak(){
@@ -67,6 +69,7 @@ public class TestUtils {
             .map(entry -> entry.getValue().getIpAddress())
             .get()
           )
+          .put("POSTGRES_PORT_5432_TCP_PORT", format("%s", POSTGRES_PORT))
           .put("POSTGRES_USER", "dev")
           .put("POSTGRES_PASSWORD", "dev")
           .put("POSTGRES_DATABASE", "keycloak-db")
@@ -85,9 +88,9 @@ public class TestUtils {
       .withUsername("dev")
       .withPassword("dev")
       .withDatabaseName("spring_boot_sample_db")
-      .withExposedPorts(5432)
+      .withExposedPorts(POSTGRES_PORT)
       .withCreateContainerCmdModifier(
-        cmd -> ((CreateContainerCmd) cmd).withPortBindings(PortBinding.parse("5432:5432"))
+        cmd -> ((CreateContainerCmd) cmd).withPortBindings(PortBinding.parse(format("%s:%s", POSTGRES_PORT, POSTGRES_PORT)))
       );
 
     return RuleChain.outerRule(keycloak)
@@ -125,7 +128,7 @@ public class TestUtils {
     return JsonPath.read(Configuration.defaultConfiguration().jsonProvider().parse(
       new OkHttpClient()
             .newCall(new Request.Builder()
-              .url(String.format("http://%s:%s/auth/realms/%s/protocol/openid-connect/token", AUTH_HOST, AUTH_PORT, AUTH_REALM_NAME))
+              .url(format("http://%s:%s/auth/realms/%s/protocol/openid-connect/token", AUTH_HOST, AUTH_PORT, AUTH_REALM_NAME))
               .header("Content-Type", "application/x-www-form-urlencoded")
               .post(new FormBody.Builder()
                 .add("username", AUTH_USER_NAME)
