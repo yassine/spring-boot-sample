@@ -75,7 +75,7 @@ project {
     dependency 'org.spockframework:spock-core:1.1-groovy-2.4:test'
     dependency 'org.spockframework:spock-guice:1.1-groovy-2.4:test'
     dependency 'org.testcontainers:testcontainers:1.10.6:test'
-    dependency 'org.testcontainers:postgresql:1.8.0:test'
+    dependency 'org.testcontainers:postgresql:1.10.6:test'
     dependency 'org.awaitility:awaitility:3.0.0:test'
     dependency 'commons-io:commons-io:2.6:test'
     dependency 'com.squareup.okhttp3:okhttp:3.10.0:test'
