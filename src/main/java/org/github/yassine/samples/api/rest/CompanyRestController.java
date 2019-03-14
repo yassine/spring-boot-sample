@@ -1,21 +1,22 @@
 package org.github.yassine.samples.api.rest;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.github.yassine.samples.api.model.CompanyApi;
 import org.github.yassine.samples.api.model.PersonApi;
 import org.github.yassine.samples.domain.service.CompanyService;
 import org.github.yassine.samples.domain.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,38 +30,38 @@ public class CompanyRestController {
   private final CompanyService companyService;
   private final PersonService personService;
 
-  @RequestMapping(method = POST)
+  @PostMapping
   public CompanyApi onCreate(@Valid @RequestBody CompanyApi companyApi) {
     return companyService.save(companyApi);
   }
 
-  @RequestMapping(method = PUT)
+  @PutMapping
   public Optional<CompanyApi> onUpdate(@Valid @RequestBody CompanyApi companyApi) {
     return companyService.update(companyApi);
   }
 
-  @RequestMapping(method = GET) @RequiresPermissions("TEST")
+  @GetMapping
   public Page<CompanyApi> list(@RequestParam(value = "page", defaultValue = "0") Integer page,
                         @RequestParam(value = "size", defaultValue = "10") Integer pageSize) {
     return companyService.list(page, pageSize);
   }
 
-  @RequestMapping(method = DELETE, value = "/{companyId}")
+  @DeleteMapping("/{companyId}")
   public void onDelete(@PathVariable UUID companyId) {
     companyService.delete(companyId);
   }
 
-  @RequestMapping(value = "/{companyId}", method = GET)
+  @GetMapping(value = "/{companyId}")
   public Optional<CompanyApi> get(@PathVariable UUID companyId) {
     return companyService.findByUuid(companyId);
   }
 
-  @RequestMapping(value = "/{companyId}/owner", method = POST)
+  @PostMapping(value = "/{companyId}/owner")
   public PersonApi onOwnerAdd(@Valid @RequestBody PersonApi personApi, @PathVariable UUID companyId) {
     return personService.addCompanyOwner(companyId, personApi);
   }
 
-  @RequestMapping(value = "/{companyId}/owner", method = GET)
+  @GetMapping(value = "/{companyId}/owner")
   public Optional<List<PersonApi>> owners(@PathVariable UUID companyId) {
     return personService.getOwners(companyId);
   }
